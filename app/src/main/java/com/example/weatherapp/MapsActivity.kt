@@ -1,15 +1,16 @@
 package com.example.weatherapp
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Debug
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
@@ -31,7 +32,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private var mLocationPermissionGranted: Boolean = false
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
-    private val PERMISSION_REQUEST_ACCES_FINE_LOCATION = 1
+    private val PERMISSION_REQUEST_ACCES_FINE_LOCATION: Int = 1
     private lateinit var popupView: LinearLayout
     private lateinit var cityName: TextView
     private lateinit var cityCoordinates: TextView
@@ -42,7 +43,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -54,10 +55,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         cityName = findViewById(R.id.city_name)
         cityCoordinates = findViewById(R.id.city_coordinates)
 
+        val button = findViewById<Button>(R.id.show_weather_button)
+        button.setOnClickListener {
+            val intent = Intent(this, WeatherActivity::class.java)
+            intent.putExtra("cityName", vm.getCityName().value)
+            startActivity(intent)
+        }
 
-        var cityNameText = vm.getCityName()
+        val cityNameText = vm.getCityName()
         cityNameText.observe(this, Observer { name -> cityName.text = name })
-        var cityCoordsText = vm.getCityCoords()
+        val cityCoordsText = vm.getCityCoords()
         cityCoordsText.observe(this, Observer { coords -> cityCoordinates.text = coords })
     }
 

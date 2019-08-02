@@ -20,7 +20,7 @@ class MapViewModel: ViewModel() {
         cityName.value = name
     }
     fun setCityCoords(coords: String){
-        cityName.value = coords
+        cityCoords.value = coords
     }
 
 }
