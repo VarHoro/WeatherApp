@@ -1,6 +1,7 @@
 package com.example.weatherapp.model
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 
 class WeatherViewModel : ViewModel() {
@@ -11,19 +12,16 @@ class WeatherViewModel : ViewModel() {
     var windSpeed: MutableLiveData<Double> = MutableLiveData()
     private var interactor: IInteractor = Interactor()
 
-    fun getWeatherData(name: String): Boolean {
+    fun getWeatherData(name: String) {
         val model = interactor.getWeatherData(name)
-
-        return if (model.type != "") {
-            weatherType.value = model.type
-            weatherTemperature.value = model.temperature
-            humidity.value = model.humidity
-            pressure.value = model.pressure
-            windSpeed.value = model.wind
-            true
-        } else {
-            false
-        }
+/*
+        model.observe(this, Observer { m ->
+            weatherType.value = m.type
+            weatherTemperature.value = m.temperature
+            humidity.value = m.humidity
+            pressure.value = m.pressure
+            windSpeed.value = m.wind
+        })*/
     }
 
 }
