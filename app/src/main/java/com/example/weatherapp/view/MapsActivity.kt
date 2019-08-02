@@ -1,4 +1,4 @@
-package com.example.weatherapp
+package com.example.weatherapp.view
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,12 +20,14 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
-
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
 import java.io.IOException
 import com.google.android.gms.tasks.OnCompleteListener as OnCompleteListener
+
+import com.example.weatherapp.R
+import com.example.weatherapp.model.MapViewModel
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 

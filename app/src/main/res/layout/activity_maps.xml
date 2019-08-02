@@ -3,19 +3,19 @@
     <data>
         <variable
                 name="viewModel"
-                type="com.example.weatherapp.MapViewModel"/>
+                type="com.example.weatherapp.model.MapViewModel"/>
     </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context=".MapsActivity">
+              tools:context=".view.MapsActivity">
     <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:id="@+id/map"
-              tools:context=".MapsActivity"
+              tools:context=".view.MapsActivity"
               android:name="com.google.android.gms.maps.SupportMapFragment"
               android:layout_weight="6"/>
     <LinearLayout
@@ -37,13 +37,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="@{viewModel.cityCoords}"/>
+                android:text="@{viewModel.cityCoords}" android:textSize="12sp"/>
         <Button
                 android:id="@+id/show_weather_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/show_weather_button_text"
-        />
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
     </LinearLayout>
 </LinearLayout>
 </layout>
