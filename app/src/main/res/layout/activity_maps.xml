@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+                name="viewModel"
+                type="com.example.weatherapp.MapViewModel"/>
+    </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
@@ -11,7 +17,7 @@
               android:id="@+id/map"
               tools:context=".MapsActivity"
               android:name="com.google.android.gms.maps.SupportMapFragment"
-              android:layout_weight="8"/>
+              android:layout_weight="6"/>
     <LinearLayout
             android:id="@+id/popup_view"
             android:orientation="vertical"
@@ -25,13 +31,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="@string/city_name_blank" android:textSize="24sp"/>
+                android:text="@{viewModel.cityName}"/>
         <TextView
                 android:id="@+id/city_coordinates"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="@string/city_coordinates_blank"/>
+                android:text="@{viewModel.cityCoords}"/>
         <Button
                 android:id="@+id/show_weather_button"
                 android:layout_width="match_parent"
@@ -40,3 +46,4 @@
         />
     </LinearLayout>
 </LinearLayout>
+</layout>

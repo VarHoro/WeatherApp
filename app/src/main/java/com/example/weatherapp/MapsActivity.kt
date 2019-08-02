@@ -1,12 +1,12 @@
 package com.example.weatherapp
 
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Debug
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -52,6 +53,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         popupView.visibility = GONE
         cityName = findViewById(R.id.city_name)
         cityCoordinates = findViewById(R.id.city_coordinates)
+
+
+        var cityNameText = vm.getCityName()
+        cityNameText.observe(this, Observer { name -> cityName.text = name })
+        var cityCoordsText = vm.getCityCoords()
+        cityCoordsText.observe(this, Observer { coords -> cityCoordinates.text = coords })
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -93,7 +100,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun updateLocationUI(){
         try{
-            if (mLocationPermissionGranted){
+            if (mLocationPermissionGranted){ //show dot and button if there is permission
                 mMap.isMyLocationEnabled = true
                 mMap.uiSettings.isMyLocationButtonEnabled = true
             } else {
@@ -108,14 +115,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun getDeviceLocation(){
         try {
-            if (mLocationPermissionGranted){
+            if (mLocationPermissionGranted){ //checking for permission
                 var locationResult = mFusedLocationProviderClient.lastLocation
                 locationResult.addOnCompleteListener {task: Task<Location> ->
-                    if (task.isSuccessful){
+                    if (task.isSuccessful){ //show location on the map
                         var mLastKnownLocation = task.result
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(
                             LatLng(mLastKnownLocation!!.latitude, mLastKnownLocation.longitude)))
-                    } else {
+                    } else { //default placement
                         val sydney = LatLng(-34.0, 151.0)
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
                         mMap.uiSettings.isMyLocationButtonEnabled = false
@@ -131,24 +138,29 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val geocoder = Geocoder(this)
         val addresses: List<Address>?
         val address: Address?
-        var addressText:String? = ""
+        var addressText: String? = ""
 
         try{
             addresses = geocoder.getFromLocation(latlng.latitude, latlng.longitude, 1)
             if (null != addresses && addresses.isNotEmpty()){
                 address = addresses[0]
-                addressText = address.locality
-                if (addressText != null){
-                    popupView.visibility = VISIBLE
-                    cityName.text = addressText
-                    val latitude = latlng.latitude.toString()
-                    val longitude = latlng.longitude.toString()
-                    cityCoordinates.text = latitude.plus(", ").plus(longitude)
+                addressText = address.locality //trying to get city name
+                if (addressText != null){ //if there is smth then show popup w/ city name and coords
+                    showPopup(addressText, latlng)
                 }
             }
         } catch (e: IOException){
             Log.e("MapsActivity", e.localizedMessage)
         }
         return addressText ?: ""
+    }
+
+    private fun showPopup(text: String, latlng: LatLng){ //show city name and coordinates
+        popupView.visibility = VISIBLE
+
+        vm.setCityName(text)
+        val latitude = latlng.latitude.toString()
+        val longitude = latlng.longitude.toString()
+        vm.setCityCoords(latitude.plus(", ").plus(longitude))
     }
 }
