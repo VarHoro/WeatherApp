@@ -8,6 +8,7 @@ import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Button
@@ -35,7 +36,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var mLocationPermissionGranted: Boolean = false
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private val PERMISSION_REQUEST_ACCES_FINE_LOCATION: Int = 1
-    private lateinit var popupView: LinearLayout
+    private lateinit var popupView: View
     private lateinit var cityName: TextView
     private lateinit var cityCoordinates: TextView
     private val vm: MapViewModel by lazy {
@@ -168,8 +169,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         popupView.visibility = VISIBLE
 
         vm.setCityName(text)
-        val latitude = latlng.latitude.toString()
-        val longitude = latlng.longitude.toString()
+        val latitude = "%.3f".format(latlng.latitude)
+        val longitude = "%.3f".format(latlng.longitude)
         vm.setCityCoords(latitude.plus(", ").plus(longitude))
     }
 }

@@ -7,4 +7,6 @@ class WeatherSimpleModel {
     var pressure: Double? = 0.0
     var humidity: Double? = -1.0
     var wind: Double? = -1.0
+
+    
 }
