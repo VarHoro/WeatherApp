@@ -8,5 +8,5 @@ class WeatherSimpleModel {
     var humidity: Double? = -1.0
     var wind: Double? = -1.0
 
-    
+    var error: String = ""
 }

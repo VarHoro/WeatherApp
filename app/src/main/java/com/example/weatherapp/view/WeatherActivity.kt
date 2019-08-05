@@ -1,5 +1,7 @@
 package com.example.weatherapp.view
 
+import android.app.AlertDialog
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -41,6 +43,8 @@ class WeatherActivity : AppCompatActivity() {
         title = cn
 
         vm.getWeatherData(cn)
+
+
 
         //icon
         val weatherIcon: LiveData<String> = vm.icon
@@ -114,6 +118,21 @@ class WeatherActivity : AppCompatActivity() {
         //loading
         val f: LiveData<Boolean> = vm.isLoading
         f.observe(this, Observer { flag -> showProgressBar(flag) })
+
+        //error
+        val er: LiveData<String> = vm.error
+        er.observe(this, Observer{ e ->
+            if (e.isNotEmpty()){
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle(R.string.error_title)
+                builder.setMessage(e)
+                builder.setPositiveButton("OK"){ _, _ ->
+                    finish()
+                }
+                val alertDialog: AlertDialog = builder.create()
+                alertDialog.show()
+            }
+        })
     }
 
     private fun showProgressBar(f: Boolean) {

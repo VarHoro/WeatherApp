@@ -1,7 +1,9 @@
 package com.example.weatherapp.model
 
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.weatherapp.view.WeatherActivity
 import kotlinx.coroutines.*
 
 class WeatherViewModel : ViewModel() {
@@ -12,6 +14,7 @@ class WeatherViewModel : ViewModel() {
     var windSpeed: MutableLiveData<Double> = MutableLiveData()
     var isLoading: MutableLiveData<Boolean> = MutableLiveData()
     var icon: MutableLiveData<String> = MutableLiveData()
+    var error: MutableLiveData<String> = MutableLiveData()
     private var interactor: IInteractor = Interactor()
     private var model: WeatherSimpleModel = WeatherSimpleModel()
 
@@ -25,20 +28,24 @@ class WeatherViewModel : ViewModel() {
 
     fun getWeatherData(name: String): Boolean {
         isLoading.value = true
-        uiScope.launch{
+        uiScope.launch {
             loadData(name)
-            weatherType.value = model.type
-            weatherTemperature.value = model.temperature
-            humidity.value = model.humidity
-            pressure.value = model.pressure
-            windSpeed.value = model.wind
-            icon.value = model.icon
+            if (model.error == "") {
+                weatherType.value = model.type
+                weatherTemperature.value = model.temperature
+                humidity.value = model.humidity
+                pressure.value = model.pressure
+                windSpeed.value = model.wind
+                icon.value = model.icon
+            } else {
+                error.value = model.error
+            }
             isLoading.value = false
         }
         return true
     }
-    
-    private suspend fun loadData(name: String) = withContext(Dispatchers.Default){
+
+    private suspend fun loadData(name: String) = withContext(Dispatchers.Default) {
         model = interactor.getWeatherData(name)
     }
 

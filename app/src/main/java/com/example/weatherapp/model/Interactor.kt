@@ -6,6 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import com.example.weatherapp.open_weather_api.APP_ID
 import com.example.weatherapp.open_weather_api.OpenWeatherAPI
 import kotlinx.coroutines.*
+import java.io.IOException
 
 class Interactor : IInteractor {
 
@@ -20,15 +21,25 @@ class Interactor : IInteractor {
         val service = retrofit.create(OpenWeatherAPI::class.java)
         val call = service.getWeatherByCityName(name, APP_ID)
         GlobalScope.launch {
-            val c = call.execute().body()
-            if (c != null) {
-                model.type = c.weather[0].description?.capitalize()
-                model.wind = c.wind?.speed
-                model.icon = c.weather[0].icon
-                model.humidity = c.main?.humidity
-                model.pressure = c.main?.pressure
-                model.temperature = c.main?.temp
+            try {
+                val response = call.execute()
+                if (response.isSuccessful) {
+                    val c = response.body()
+                    if (c != null) {
+                        model.type = c.weather[0].description?.capitalize()
+                        model.wind = c.wind?.speed
+                        model.icon = c.weather[0].icon
+                        model.humidity = c.main?.humidity
+                        model.pressure = c.main?.pressure
+                        model.temperature = c.main?.temp
+                    }
+                } else {
+                    model.error = server_error
+                }
+            } catch (e: IOException){
+                model.error = network_fail
             }
+
         }
         runBlocking { delay(3000L) }
         return model
