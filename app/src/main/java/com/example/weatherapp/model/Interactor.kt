@@ -13,14 +13,14 @@ class Interactor : IInteractor {
     val BASE_URL = "https://api.openweathermap.org/"
     private var model = WeatherSimpleModel()
 
-    override fun getWeatherData(name: String): WeatherSimpleModel {
+    override suspend fun getWeatherData(name: String): WeatherSimpleModel {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val service = retrofit.create(OpenWeatherAPI::class.java)
         val call = service.getWeatherByCityName(name, APP_ID)
-        GlobalScope.launch {
+        val job = GlobalScope.launch {
             try {
                 val response = call.execute()
                 if (response.isSuccessful) {
@@ -41,7 +41,7 @@ class Interactor : IInteractor {
             }
 
         }
-        runBlocking { delay(3000L) }
+        job.join()
         return model
     }
 }
