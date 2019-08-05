@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools" android:id="@+id/layout">
     <data>
-        <import type="android.view.View"/>
         <variable name="vm" type="com.example.weatherapp.model.WeatherViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,7 +41,7 @@
                 android:layout_marginEnd="8dp" android:contentDescription="@string/app_name"/>
         <TextView
                 android:id="@+id/temperature_blank"
-                android:text="@{vm.weatherTemperature.toString()}"
+                android:text="@{@string/temperature_blank(vm.weatherTemperature.toString())}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"

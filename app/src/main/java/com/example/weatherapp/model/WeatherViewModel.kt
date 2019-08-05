@@ -36,7 +36,7 @@ class WeatherViewModel : ViewModel() {
         return true
     }
     
-    suspend fun loadData(name: String) = withContext(Dispatchers.Default){
+    private suspend fun loadData(name: String) = withContext(Dispatchers.Default){
         model = interactor.getWeatherData(name)
     }
 }
