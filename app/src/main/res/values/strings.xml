@@ -5,8 +5,12 @@
     <string name="city_name_blank">CityName</string>
     <string name="city_coordinates_blank">00.00 00.00</string>
     <string name="weather_type_blank"> </string>
-    <string name="temperature_blank">%s °C</string>
-    <string name="humidity_blank">%1$s %</string>
-    <string name="pressure_blank">%1$s hPa</string>
-    <string name="wind_speed_blank">%1$s m/s</string>
+    <string name="h_text">Humidity: </string>
+    <string name="p_text">Pressure: </string>
+    <string name="w_text">Wind speed: </string>
+    <string name="temperature_blank">°F</string>  <!-- TODO: change to C as soon as possible! -->
+    <string name="humidity_blank">%</string>
+    <string name="pressure_blank">hPa</string>
+    <string name="wind_speed_blank">m/s</string>
+    <string name="no_data">---</string>
 </resources>

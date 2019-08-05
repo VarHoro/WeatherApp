@@ -7,10 +7,11 @@ import kotlinx.coroutines.*
 class WeatherViewModel : ViewModel() {
     var weatherType: MutableLiveData<String> = MutableLiveData()
     var weatherTemperature: MutableLiveData<Double> = MutableLiveData()
-    var humidity: MutableLiveData<Int> = MutableLiveData()
-    var pressure: MutableLiveData<Int> = MutableLiveData()
+    var humidity: MutableLiveData<Double> = MutableLiveData()
+    var pressure: MutableLiveData<Double> = MutableLiveData()
     var windSpeed: MutableLiveData<Double> = MutableLiveData()
     var isLoading: MutableLiveData<Boolean> = MutableLiveData()
+    var icon: MutableLiveData<String> = MutableLiveData()
     private var interactor: IInteractor = Interactor()
     private var model: WeatherSimpleModel = WeatherSimpleModel()
 
@@ -31,6 +32,7 @@ class WeatherViewModel : ViewModel() {
             humidity.value = model.humidity
             pressure.value = model.pressure
             windSpeed.value = model.wind
+            icon.value = model.icon
             isLoading.value = false
         }
         return true
@@ -39,4 +41,5 @@ class WeatherViewModel : ViewModel() {
     private suspend fun loadData(name: String) = withContext(Dispatchers.Default){
         model = interactor.getWeatherData(name)
     }
+
 }

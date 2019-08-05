@@ -22,15 +22,15 @@ class Interactor : IInteractor {
         GlobalScope.launch {
             val c = call.execute().body()
             if (c != null) {
-                model.type = c.weather[0].description
+                model.type = c.weather[0].description?.capitalize()
                 model.wind = c.wind?.speed
                 model.icon = c.weather[0].icon
-                model.humidity = c.main?.humidity
+                //model.humidity = c.main?.humidity
                 model.pressure = c.main?.pressure
                 model.temperature = c.main?.temp
             }
         }
-        runBlocking { delay(2000L) }
+        runBlocking { delay(3000L) }
         return model
     }
 }
