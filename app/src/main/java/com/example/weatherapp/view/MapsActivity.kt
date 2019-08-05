@@ -51,6 +51,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        title = resources.getString(R.string.title_activity_maps)
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         popupView = findViewById(R.id.popup_view)

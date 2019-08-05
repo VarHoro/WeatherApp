@@ -33,6 +33,7 @@ class WeatherActivity : AppCompatActivity() {
 
         screen = findViewById(R.id.loading_screen)
         progressBar = findViewById(R.id.weather_progress_bar)
+        showProgressBar(true)
 
         //get cityName from intent, change title
         val bundle: Bundle? = intent.extras
@@ -43,8 +44,6 @@ class WeatherActivity : AppCompatActivity() {
         title = cn
 
         vm.getWeatherData(cn)
-
-
 
         //icon
         val weatherIcon: LiveData<String> = vm.icon

@@ -43,7 +43,7 @@
             <ImageView
                     android:id="@+id/weather_type_image"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" app:srcCompat="@color/colorPrimary"
+                    android:layout_height="match_parent" app:srcCompat="@color/colorBackground"
                     android:layout_marginTop="0dp"
                     android:layout_marginStart="0dp"
                     android:layout_marginBottom="0dp"
