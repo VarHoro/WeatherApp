@@ -29,16 +29,16 @@ class WeatherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather)
 
-        //get cityName from intent, change title and save in vm
+        screen = findViewById(R.id.loading_screen)
+        progressBar = findViewById(R.id.weather_progress_bar)
+
+        //get cityName from intent, change title
         val bundle: Bundle? = intent.extras
         var cn = ""
         if (bundle != null) {
             cn = bundle.getString("cityName").toString()
         }
         title = cn
-
-        screen = findViewById(R.id.loading_screen)
-        progressBar = findViewById(R.id.weather_progress_bar)
 
         vm.getWeatherData(cn)
 
@@ -67,53 +67,47 @@ class WeatherActivity : AppCompatActivity() {
             this,
             Observer { temper ->
                 if (temper != -999.0) {
-                    tempText.text = temper.toString().plus(resources.getString(R.string.temperature_blank))
+                    tempText.text = temper.toString().plus(resources.getString(R.string.temperature_blank)) //°C
                 } else {
-                    tempText.visibility = GONE
+                    tempText.text = resources.getString(R.string.no_data).plus(resources.getString(R.string.temperature_blank)) // ---°C
                 }
             })
 
         //humidity
         val hum: LiveData<Double> = vm.humidity
         val humText = findViewById<TextView>(R.id.humidity_text)
-        val hText = findViewById<TextView>(R.id.h_text_view)
         hum.observe(
             this,
             Observer { humid ->
                 if (humid != -1.0) {
-                    humText.text = humid.toString().plus(" ").plus(resources.getString(R.string.humidity_blank))
+                    humText.text = humid.toString().plus(" ").plus(resources.getString(R.string.humidity_blank)) // %
                 } else {
-                    humText.visibility = GONE
-                    hText.visibility = GONE
+                    humText.text = resources.getString(R.string.no_data) // ---
                 }
             })
 
         //pressure
         val pres: LiveData<Double> = vm.pressure
         val presText = findViewById<TextView>(R.id.pressure_text)
-        val pText = findViewById<TextView>(R.id.p_text_view)
         pres.observe(
             this,
             Observer { press ->
                 if (press != 0.0){
-                presText.text = press.toString().plus(" ").plus(resources.getString(R.string.pressure_blank))
+                presText.text = press.toString().plus(" ").plus(resources.getString(R.string.pressure_blank)) // hPa
             }else{
-                    presText.visibility = GONE
-                    pText.visibility = GONE
+                    presText.text = resources.getString(R.string.no_data) // ---
                 }})
 
         //wind speed
         val wind: LiveData<Double> = vm.windSpeed
         val windText = findViewById<TextView>(R.id.wind_speed_text)
-        val wText = findViewById<TextView>(R.id.w_text_view)
         wind.observe(
             this,
             Observer { windS ->
                 if (windS != -1.0){
-                windText.text = windS.toString().plus(" ").plus(resources.getString(R.string.wind_speed_blank))
+                windText.text = windS.toString().plus(" ").plus(resources.getString(R.string.wind_speed_blank)) // m/s
             } else {
-                    windText.visibility = GONE
-                    wText.visibility = GONE
+                    windText.text = resources.getString(R.string.no_data) // ---
                 }
             })
 
