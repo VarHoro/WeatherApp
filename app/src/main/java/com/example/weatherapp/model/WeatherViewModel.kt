@@ -1,8 +1,8 @@
 package com.example.weatherapp.model
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.*
 
 class WeatherViewModel : ViewModel() {
     var weatherType: MutableLiveData<String> = MutableLiveData()
@@ -10,18 +10,33 @@ class WeatherViewModel : ViewModel() {
     var humidity: MutableLiveData<Int> = MutableLiveData()
     var pressure: MutableLiveData<Int> = MutableLiveData()
     var windSpeed: MutableLiveData<Double> = MutableLiveData()
+    var isLoading: MutableLiveData<Boolean> = MutableLiveData()
     private var interactor: IInteractor = Interactor()
+    private var model: WeatherSimpleModel = WeatherSimpleModel()
 
-    fun getWeatherData(name: String) {
-        val model = interactor.getWeatherData(name)
-/*
-        model.observe(this, Observer { m ->
-            weatherType.value = m.type
-            weatherTemperature.value = m.temperature
-            humidity.value = m.humidity
-            pressure.value = m.pressure
-            windSpeed.value = m.wind
-        })*/
+    private val viewModelJob = SupervisorJob()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 
+    fun getWeatherData(name: String): Boolean {
+        isLoading.value = true
+        uiScope.launch{
+            loadData(name)
+            weatherType.value = model.type
+            weatherTemperature.value = model.temperature
+            humidity.value = model.humidity
+            pressure.value = model.pressure
+            windSpeed.value = model.wind
+            isLoading.value = false
+        }
+        return true
+    }
+    
+    suspend fun loadData(name: String) = withContext(Dispatchers.Default){
+        model = interactor.getWeatherData(name)
+    }
 }
