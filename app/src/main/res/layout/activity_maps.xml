@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:map="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable
-                name="viewModel"
-                type="com.example.weatherapp.model.MapViewModel"/>
     </data>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context=".view.MapsActivity">
-    <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:id="@+id/map"
-              tools:context=".view.MapsActivity"
-              android:name="com.google.android.gms.maps.SupportMapFragment"
-              android:layout_weight="6"/>
-    <LinearLayout
-            android:id="@+id/popup_view"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:visibility="visible"
-    >
-        <TextView
-                android:id="@+id/city_name"
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  tools:context=".view.MapsActivity">
+        <fragment android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:id="@+id/map"
+                  tools:context=".view.MapsActivity"
+                  android:name="com.google.android.gms.maps.SupportMapFragment"
+                  android:layout_weight="6"/>
+        <LinearLayout
+                android:id="@+id/popup_view"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="@{viewModel.cityName}" android:textSize="18sp" android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"/>
-        <TextView
-                android:id="@+id/city_coordinates"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="@{viewModel.cityCoords}" android:textSize="12sp" android:layout_marginStart="16dp"/>
-        <Button
-                android:id="@+id/show_weather_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/show_weather_button_text"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+                android:padding="8dp"
+                android:visibility="visible"
+        >
+            <TextView
+                    android:id="@+id/city_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/city_name_blank"
+                    android:textSize="18sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"/>
+            <TextView
+                    android:id="@+id/city_coordinates"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/city_coordinates_blank"
+                    android:textSize="12sp"
+                    android:layout_marginStart="16dp"/>
+            <Button
+                    android:id="@+id/show_weather_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_weather_button_text"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
 </layout>

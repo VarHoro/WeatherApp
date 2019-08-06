@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -27,7 +28,9 @@ import java.io.IOException
 import com.google.android.gms.tasks.OnCompleteListener as OnCompleteListener
 
 import com.example.weatherapp.R
+import com.example.weatherapp.databinding.ActivityMapsBinding
 import com.example.weatherapp.model.MapViewModel
+import org.koin.android.ext.android.bind
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -35,16 +38,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var mLocationPermissionGranted: Boolean = false
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private val PERMISSION_REQUEST_ACCES_FINE_LOCATION: Int = 1
-    private lateinit var popupView: View
-    private lateinit var cityName: TextView
-    private lateinit var cityCoordinates: TextView
+
+    private lateinit var binding: ActivityMapsBinding
+
     private val vm: MapViewModel by lazy {
         ViewModelProviders.of(this).get(MapViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_maps)
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -54,22 +58,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        popupView = findViewById(R.id.popup_view)
-        popupView.visibility = GONE
-        cityName = findViewById(R.id.city_name)
-        cityCoordinates = findViewById(R.id.city_coordinates)
-
-        val button = findViewById<Button>(R.id.show_weather_button)
-        button.setOnClickListener {
+        binding.popupView.visibility = GONE
+        binding.cityName
+        binding.cityCoordinates
+        binding.showWeatherButton
+        binding.showWeatherButton.setOnClickListener{
             val intent = Intent(this, WeatherActivity::class.java)
             intent.putExtra("cityName", vm.getCityName().value)
             startActivity(intent)
         }
 
         val cityNameText = vm.getCityName()
-        cityNameText.observe(this, Observer { name -> cityName.text = name })
+        cityNameText.observe(this, Observer { name -> binding.cityName.text = name })
         val cityCoordsText = vm.getCityCoords()
-        cityCoordsText.observe(this, Observer { coords -> cityCoordinates.text = coords })
+        cityCoordsText.observe(this, Observer { coords -> binding.cityCoordinates.text = coords })
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -167,7 +169,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun showPopup(text: String, latlng: LatLng){ //show city name and coordinates
-        popupView.visibility = VISIBLE
+        binding.popupView.visibility = VISIBLE
 
         vm.setCityName(text)
         val latitude = "%.3f".format(latlng.latitude)
