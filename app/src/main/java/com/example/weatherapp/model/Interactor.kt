@@ -1,25 +1,26 @@
 package com.example.weatherapp.model
 
+import com.example.weatherapp.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.coroutines.*
 import java.io.IOException
 
-import com.example.weatherapp.open_weather_api.APP_ID
 import com.example.weatherapp.open_weather_api.OpenWeatherAPI
 
 class Interactor : IInteractor {
 
-    val BASE_URL = "https://api.openweathermap.org/"
     private var model = WeatherSimpleModel()
 
     override suspend fun getWeatherData(name: String): WeatherSimpleModel {
+
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val service = retrofit.create(OpenWeatherAPI::class.java)
         val call = service.getWeatherByCityName(name, APP_ID)
+
         val job = GlobalScope.launch {
             try {
                 val response = call.execute()
@@ -41,6 +42,7 @@ class Interactor : IInteractor {
             }
 
         }
+
         job.join()
         return model
     }

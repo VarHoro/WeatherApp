@@ -13,14 +13,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
+import com.example.weatherapp.IMAGE_URL
 
 import com.example.weatherapp.R
+import com.example.weatherapp.constKtoC
 import com.example.weatherapp.model.WeatherViewModel
 
 class WeatherActivity : AppCompatActivity() {
 
-    var imageUrl = "https://openweathermap.org/img/wn/%s@2x.png"
-    val constKtoC = 273.15
+    var imageUrl = IMAGE_URL
 
     private lateinit var screen: View
     private lateinit var progressBar: ProgressBar
@@ -31,6 +32,7 @@ class WeatherActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_weather)
 
         screen = findViewById(R.id.loading_screen)
@@ -52,7 +54,11 @@ class WeatherActivity : AppCompatActivity() {
         val imageView = findViewById<ImageView>(R.id.weather_type_image)
         weatherIcon.observe(
             this,
-            Observer { i -> Glide.with(this).load(String.format(imageUrl, i.toString())).into(imageView) })
+            Observer { i ->
+                Glide.with(this)
+                    .load(String.format(imageUrl, i.toString()))
+                    .into(imageView)
+            })
 
         //weather type
         val weatherType: LiveData<String> = vm.weatherType
@@ -75,7 +81,8 @@ class WeatherActivity : AppCompatActivity() {
                     val t = temper - constKtoC //from kelvin to celsius
                     tempText.text = "%.2f".format(t).plus(resources.getString(R.string.temperature_blank)) //°C
                 } else {
-                    tempText.text = resources.getString(R.string.no_data).plus(resources.getString(R.string.temperature_blank)) // ---°C
+                    tempText.text = resources.getString(R.string.no_data)
+                        .plus(resources.getString(R.string.temperature_blank)) // ---°C
                 }
             })
 
@@ -98,11 +105,12 @@ class WeatherActivity : AppCompatActivity() {
         pres.observe(
             this,
             Observer { press ->
-                if (press != 0.0){
-                presText.text = press.toString().plus(" ").plus(resources.getString(R.string.pressure_blank)) // hPa
-            }else{
+                if (press != 0.0) {
+                    presText.text = press.toString().plus(" ").plus(resources.getString(R.string.pressure_blank)) // hPa
+                } else {
                     presText.text = resources.getString(R.string.no_data) // ---
-                }})
+                }
+            })
 
         //wind speed
         val wind: LiveData<Double> = vm.windSpeed
@@ -110,9 +118,10 @@ class WeatherActivity : AppCompatActivity() {
         wind.observe(
             this,
             Observer { windS ->
-                if (windS != -1.0){
-                windText.text = windS.toString().plus(" ").plus(resources.getString(R.string.wind_speed_blank)) // m/s
-            } else {
+                if (windS != -1.0) {
+                    windText.text =
+                        windS.toString().plus(" ").plus(resources.getString(R.string.wind_speed_blank)) // m/s
+                } else {
                     windText.text = resources.getString(R.string.no_data) // ---
                 }
             })
@@ -123,12 +132,12 @@ class WeatherActivity : AppCompatActivity() {
 
         //show error
         val er: LiveData<String> = vm.error
-        er.observe(this, Observer{ e ->
-            if (e.isNotEmpty()){
+        er.observe(this, Observer { e ->
+            if (e.isNotEmpty()) {
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle(R.string.error_title)
                 builder.setMessage(e)
-                builder.setPositiveButton("OK"){ _, _ ->
+                builder.setPositiveButton("OK") { _, _ ->
                     finish()
                 }
                 val alertDialog: AlertDialog = builder.create()

@@ -3,7 +3,7 @@
     <string name="title_activity_maps">Choose a city</string>
     <string name="show_weather_button_text">Show Weather</string>
     <string name="city_name_blank">CityName</string>
-    <string name="city_coordinates_blank">00.00 00.00</string>
+    <string name="city_coordinates_blank">00.00, 00.00</string>
     <string name="weather_type_blank"> </string>
     <string name="h_text">Humidity: </string>
     <string name="p_text">Pressure: </string>
