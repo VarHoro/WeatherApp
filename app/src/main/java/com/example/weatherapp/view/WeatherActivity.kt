@@ -9,6 +9,7 @@ import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,14 +18,15 @@ import com.example.weatherapp.IMAGE_URL
 
 import com.example.weatherapp.R
 import com.example.weatherapp.constKtoC
+import com.example.weatherapp.databinding.ActivityWeatherBinding
 import com.example.weatherapp.model.WeatherViewModel
+import org.koin.android.ext.android.bind
 
 class WeatherActivity : AppCompatActivity() {
 
     var imageUrl = IMAGE_URL
 
-    private lateinit var screen: View
-    private lateinit var progressBar: ProgressBar
+    private lateinit var binding: ActivityWeatherBinding
 
     private val vm: WeatherViewModel by lazy {
         ViewModelProviders.of(this).get(WeatherViewModel::class.java)
@@ -33,10 +35,10 @@ class WeatherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_weather)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_weather)
 
-        screen = findViewById(R.id.loading_screen)
-        progressBar = findViewById(R.id.weather_progress_bar)
+        binding.loadingScreen
+        binding.weatherProgressBar
         showProgressBar(true)
 
         //get cityName from intent, change title
@@ -51,78 +53,75 @@ class WeatherActivity : AppCompatActivity() {
 
         //icon
         val weatherIcon: LiveData<String> = vm.icon
-        val imageView = findViewById<ImageView>(R.id.weather_type_image)
         weatherIcon.observe(
             this,
             Observer { i ->
                 Glide.with(this)
                     .load(String.format(imageUrl, i.toString()))
-                    .into(imageView)
+                    .into(binding.weatherTypeImage)
             })
 
         //weather type
         val weatherType: LiveData<String> = vm.weatherType
-        val weatherTypeText = findViewById<TextView>(R.id.weather_type_text)
         weatherType.observe(this, Observer { type ->
             if (type.isNotEmpty()) {
-                weatherTypeText.text = type
+                binding.weatherTypeText.text = type
             } else {
-                weatherTypeText.visibility = GONE
+                binding.weatherTypeText.visibility = GONE
             }
         })
 
         //temperature
         val temp: LiveData<Double> = vm.weatherTemperature
-        val tempText = findViewById<TextView>(R.id.temperature_blank)
         temp.observe(
             this,
             Observer { temper ->
                 if (temper != -999.0) {
                     val t = temper - constKtoC //from kelvin to celsius
-                    tempText.text = "%.2f".format(t).plus(resources.getString(R.string.temperature_blank)) //°C
+                    binding.temperatureBlank.text =
+                        "%.2f".format(t).plus(resources.getString(R.string.temperature_blank)) //°C
                 } else {
-                    tempText.text = resources.getString(R.string.no_data)
+                    binding.temperatureBlank.text = resources.getString(R.string.no_data)
                         .plus(resources.getString(R.string.temperature_blank)) // ---°C
                 }
             })
 
         //humidity
         val hum: LiveData<Double> = vm.humidity
-        val humText = findViewById<TextView>(R.id.humidity_text)
         hum.observe(
             this,
             Observer { humid ->
                 if (humid != -1.0) {
-                    humText.text = humid.toString().plus(" ").plus(resources.getString(R.string.humidity_blank)) // %
+                    binding.humidityText.text =
+                        humid.toString().plus(" ").plus(resources.getString(R.string.humidity_blank)) // %
                 } else {
-                    humText.text = resources.getString(R.string.no_data) // ---
+                    binding.humidityText.text = resources.getString(R.string.no_data) // ---
                 }
             })
 
         //pressure
         val pres: LiveData<Double> = vm.pressure
-        val presText = findViewById<TextView>(R.id.pressure_text)
         pres.observe(
             this,
             Observer { press ->
                 if (press != 0.0) {
-                    presText.text = press.toString().plus(" ").plus(resources.getString(R.string.pressure_blank)) // hPa
+                    binding.pressureText.text =
+                        press.toString().plus(" ").plus(resources.getString(R.string.pressure_blank)) // hPa
                 } else {
-                    presText.text = resources.getString(R.string.no_data) // ---
+                    binding.pressureText.text = resources.getString(R.string.no_data) // ---
                 }
             })
 
         //wind speed
         val wind: LiveData<Double> = vm.windSpeed
-        val windText = findViewById<TextView>(R.id.wind_speed_text)
         wind.observe(
             this,
             Observer { windS ->
                 if (windS != -1.0) {
-                    windText.text =
+                    binding.windSpeedText.text =
                         windS.toString().plus(" ").plus(resources.getString(R.string.wind_speed_blank)) // m/s
                 } else {
-                    windText.text = resources.getString(R.string.no_data) // ---
+                    binding.windSpeedText.text = resources.getString(R.string.no_data) // ---
                 }
             })
 
@@ -147,12 +146,14 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     private fun showProgressBar(f: Boolean) {
-        if (f) {
-            progressBar.visibility = VISIBLE
-            screen.visibility = VISIBLE
-        } else {
-            progressBar.visibility = GONE
-            screen.visibility = GONE
+        binding.apply {
+            if (f) {
+                weatherProgressBar.visibility = VISIBLE
+                loadingScreen.visibility = VISIBLE
+            } else {
+                weatherProgressBar.visibility = GONE
+                loadingScreen.visibility = GONE
+            }
         }
     }
 }
