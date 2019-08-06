@@ -1,4 +1,4 @@
-package com.example.weatherapp.view
+package com.example.weatherapp.presentation.maps
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -8,11 +8,8 @@ import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Button
-import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -29,8 +26,9 @@ import com.google.android.gms.tasks.OnCompleteListener as OnCompleteListener
 
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ActivityMapsBinding
-import com.example.weatherapp.model.MapViewModel
-import org.koin.android.ext.android.bind
+import com.example.weatherapp.presentation.weather.WeatherActivity
+import kotlinx.android.synthetic.main.activity_maps.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -41,9 +39,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var binding: ActivityMapsBinding
 
-    private val vm: MapViewModel by lazy {
+/*    private val vm: MapViewModel by lazy {
         ViewModelProviders.of(this).get(MapViewModel::class.java)
-    }
+    }*/
+
+    private val vm: MapViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,20 +58,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        binding.popupView.visibility = GONE
-        binding.cityName
-        binding.cityCoordinates
-        binding.showWeatherButton
-        binding.showWeatherButton.setOnClickListener{
+        popup_view.visibility = GONE
+        show_weather_button.setOnClickListener{
             val intent = Intent(this, WeatherActivity::class.java)
             intent.putExtra("cityName", vm.getCityName().value)
             startActivity(intent)
         }
 
         val cityNameText = vm.getCityName()
-        cityNameText.observe(this, Observer { name -> binding.cityName.text = name })
+        cityNameText.observe(this, Observer { name -> city_name.text = name })
         val cityCoordsText = vm.getCityCoords()
-        cityCoordsText.observe(this, Observer { coords -> binding.cityCoordinates.text = coords })
+        cityCoordsText.observe(this, Observer { coords -> city_coordinates.text = coords })
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -122,7 +119,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 getLocationPermission()
             }
         } catch (e: SecurityException){
-            Log.e("Exception: %s", e.message)
+            Log.e("MapsActivity", "Error: ${e.message}")
         }
     }
 
@@ -143,7 +140,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         } catch (e: SecurityException){
-            Log.e("Exception: %s", e.message)
+            Log.e("MapsActivity", "Error: ${e.message}")
         }
     }
 
@@ -163,13 +160,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         } catch (e: IOException){
-            Log.e("MapsActivity", e.localizedMessage)
+            Log.e("MapsActivity", "Error: ${e.localizedMessage}")
         }
         return addressText ?: ""
     }
 
     private fun showPopup(text: String, latlng: LatLng){ //show city name and coordinates
-        binding.popupView.visibility = VISIBLE
+        popup_view.visibility = VISIBLE
 
         vm.setCityName(text)
         val latitude = "%.3f".format(latlng.latitude)

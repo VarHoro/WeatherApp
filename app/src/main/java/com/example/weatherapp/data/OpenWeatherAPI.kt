@@ -1,4 +1,4 @@
-package com.example.weatherapp.open_weather_api
+package com.example.weatherapp.data
 
 import retrofit2.Call
 import retrofit2.http.GET

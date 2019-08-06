@@ -1,4 +1,4 @@
-package com.example.weatherapp
+package com.example.weatherapp.constants
 
 const val IMAGE_URL = "https://openweathermap.org/img/wn/%s@2x.png"
 const val BASE_URL = "https://api.openweathermap.org/"

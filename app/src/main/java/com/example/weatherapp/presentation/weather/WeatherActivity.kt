@@ -1,26 +1,21 @@
-package com.example.weatherapp.view
+package com.example.weatherapp.presentation.weather
 
 import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import com.example.weatherapp.IMAGE_URL
+import com.example.weatherapp.constants.IMAGE_URL
 
 import com.example.weatherapp.R
-import com.example.weatherapp.constKtoC
+import com.example.weatherapp.constants.constKtoC
 import com.example.weatherapp.databinding.ActivityWeatherBinding
-import com.example.weatherapp.model.WeatherViewModel
-import org.koin.android.ext.android.bind
+import kotlinx.android.synthetic.main.activity_weather.*
 
 class WeatherActivity : AppCompatActivity() {
 
@@ -36,9 +31,8 @@ class WeatherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_weather)
+        binding.viewModel = vm
 
-        binding.loadingScreen
-        binding.weatherProgressBar
         showProgressBar(true)
 
         //get cityName from intent, change title
@@ -58,16 +52,17 @@ class WeatherActivity : AppCompatActivity() {
             Observer { i ->
                 Glide.with(this)
                     .load(String.format(imageUrl, i.toString()))
-                    .into(binding.weatherTypeImage)
+                    .into(weather_type_image)
             })
+
 
         //weather type
         val weatherType: LiveData<String> = vm.weatherType
         weatherType.observe(this, Observer { type ->
             if (type.isNotEmpty()) {
-                binding.weatherTypeText.text = type
+                weather_type_text.text = type
             } else {
-                binding.weatherTypeText.visibility = GONE
+                weather_type_text.visibility = GONE
             }
         })
 
@@ -78,10 +73,10 @@ class WeatherActivity : AppCompatActivity() {
             Observer { temper ->
                 if (temper != -999.0) {
                     val t = temper - constKtoC //from kelvin to celsius
-                    binding.temperatureBlank.text =
+                    temperature_blank.text =
                         "%.2f".format(t).plus(resources.getString(R.string.temperature_blank)) //°C
                 } else {
-                    binding.temperatureBlank.text = resources.getString(R.string.no_data)
+                    temperature_blank.text = resources.getString(R.string.no_data)
                         .plus(resources.getString(R.string.temperature_blank)) // ---°C
                 }
             })
@@ -92,14 +87,15 @@ class WeatherActivity : AppCompatActivity() {
             this,
             Observer { humid ->
                 if (humid != -1.0) {
-                    binding.humidityText.text =
+                    humidity_text.text =
                         humid.toString().plus(" ").plus(resources.getString(R.string.humidity_blank)) // %
                 } else {
-                    binding.humidityText.text = resources.getString(R.string.no_data) // ---
+                    humidity_text.text = resources.getString(R.string.no_data) // ---
                 }
             })
 
         //pressure
+        /*
         val pres: LiveData<Double> = vm.pressure
         pres.observe(
             this,
@@ -111,17 +107,17 @@ class WeatherActivity : AppCompatActivity() {
                     binding.pressureText.text = resources.getString(R.string.no_data) // ---
                 }
             })
-
+*/
         //wind speed
         val wind: LiveData<Double> = vm.windSpeed
         wind.observe(
             this,
             Observer { windS ->
                 if (windS != -1.0) {
-                    binding.windSpeedText.text =
+                    wind_speed_text.text =
                         windS.toString().plus(" ").plus(resources.getString(R.string.wind_speed_blank)) // m/s
                 } else {
-                    binding.windSpeedText.text = resources.getString(R.string.no_data) // ---
+                    wind_speed_text.text = resources.getString(R.string.no_data) // ---
                 }
             })
 

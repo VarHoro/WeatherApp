@@ -2,11 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools" android:id="@+id/layout">
     <data>
+        <variable name="viewModel" type="com.example.weatherapp.presentation.weather.WeatherViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".view.WeatherActivity" android:background="@color/colorBackground">
+            tools:context=".presentation.weather.WeatherActivity" android:background="@color/colorBackground">
 
         <androidx.constraintlayout.widget.Guideline
                 android:orientation="horizontal"

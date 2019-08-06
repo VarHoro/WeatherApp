@@ -7,11 +7,11 @@
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:orientation="vertical"
-                  tools:context=".view.MapsActivity">
+                  tools:context=".presentation.maps.MapsActivity">
         <fragment android:layout_width="match_parent"
                   android:layout_height="0dp"
                   android:id="@+id/map"
-                  tools:context=".view.MapsActivity"
+                  tools:context=".presentation.maps.MapsActivity"
                   android:name="com.google.android.gms.maps.SupportMapFragment"
                   android:layout_weight="6"/>
         <LinearLayout

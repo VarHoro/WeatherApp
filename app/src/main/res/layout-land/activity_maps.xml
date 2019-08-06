@@ -4,18 +4,18 @@
     <data>
         <variable
                 name="viewModel"
-                type="com.example.weatherapp.model.MapViewModel"/>
+                type="com.example.weatherapp.presentation.maps.MapViewModel"/>
     </data>
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:context=".view.MapsActivity" android:id="@+id/linearLayout">
+            tools:context=".presentation.maps.MapsActivity" android:id="@+id/linearLayout">
         <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
                   android:layout_width="match_parent"
                   android:layout_height="0dp"
                   android:id="@+id/map"
-                  tools:context=".view.MapsActivity"
+                  tools:context=".presentation.maps.MapsActivity"
                   android:name="com.google.android.gms.maps.SupportMapFragment"
                   android:layout_weight="6"/>
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -12,8 +12,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".view.WeatherActivity"
-        android:parentActivityName=".view.MapsActivity">
+        <activity android:name=".presentation.weather.WeatherActivity"
+        android:parentActivityName=".presentation.maps.MapsActivity">
         </activity>
 
         <meta-data
@@ -21,7 +21,7 @@
                 android:value="@string/google_maps_key"/>
 
         <activity
-                android:name=".view.MapsActivity">
+                android:name=".presentation.maps.MapsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

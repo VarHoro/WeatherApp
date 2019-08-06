@@ -1,5 +1,5 @@
-package com.example.weatherapp.model
+package com.example.weatherapp.domain
 
-interface IInteractor {
+interface Interactor {
    suspend fun getWeatherData(name: String): WeatherSimpleModel
 }
