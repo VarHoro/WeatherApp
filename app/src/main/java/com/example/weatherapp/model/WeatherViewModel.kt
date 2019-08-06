@@ -1,12 +1,11 @@
 package com.example.weatherapp.model
 
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.weatherapp.view.WeatherActivity
 import kotlinx.coroutines.*
 
 class WeatherViewModel : ViewModel() {
+
     var weatherType: MutableLiveData<String> = MutableLiveData()
     var weatherTemperature: MutableLiveData<Double> = MutableLiveData()
     var humidity: MutableLiveData<Double> = MutableLiveData()
@@ -15,6 +14,7 @@ class WeatherViewModel : ViewModel() {
     var isLoading: MutableLiveData<Boolean> = MutableLiveData()
     var icon: MutableLiveData<String> = MutableLiveData()
     var error: MutableLiveData<String> = MutableLiveData()
+
     private var interactor: IInteractor = Interactor()
     private var model: WeatherSimpleModel = WeatherSimpleModel()
 

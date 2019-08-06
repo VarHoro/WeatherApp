@@ -1,7 +1,6 @@
 package com.example.weatherapp.view
 
 import android.app.AlertDialog
-import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -21,8 +20,11 @@ import com.example.weatherapp.model.WeatherViewModel
 class WeatherActivity : AppCompatActivity() {
 
     var imageUrl = "https://openweathermap.org/img/wn/%s@2x.png"
+    val constKtoC = 273.15
+
     private lateinit var screen: View
     private lateinit var progressBar: ProgressBar
+
     private val vm: WeatherViewModel by lazy {
         ViewModelProviders.of(this).get(WeatherViewModel::class.java)
     }
@@ -70,7 +72,8 @@ class WeatherActivity : AppCompatActivity() {
             this,
             Observer { temper ->
                 if (temper != -999.0) {
-                    tempText.text = temper.toString().plus(resources.getString(R.string.temperature_blank)) //°C
+                    val t = temper - constKtoC //from kelvin to celsius
+                    tempText.text = "%.2f".format(t).plus(resources.getString(R.string.temperature_blank)) //°C
                 } else {
                     tempText.text = resources.getString(R.string.no_data).plus(resources.getString(R.string.temperature_blank)) // ---°C
                 }
@@ -114,11 +117,11 @@ class WeatherActivity : AppCompatActivity() {
                 }
             })
 
-        //loading
+        //is loading
         val f: LiveData<Boolean> = vm.isLoading
         f.observe(this, Observer { flag -> showProgressBar(flag) })
 
-        //error
+        //show error
         val er: LiveData<String> = vm.error
         er.observe(this, Observer{ e ->
             if (e.isNotEmpty()){

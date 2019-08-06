@@ -2,11 +2,11 @@ package com.example.weatherapp.model
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlinx.coroutines.*
+import java.io.IOException
 
 import com.example.weatherapp.open_weather_api.APP_ID
 import com.example.weatherapp.open_weather_api.OpenWeatherAPI
-import kotlinx.coroutines.*
-import java.io.IOException
 
 class Interactor : IInteractor {
 
