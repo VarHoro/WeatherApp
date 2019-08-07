@@ -1,26 +1,29 @@
 package com.example.weatherapp.presentation.weather
 
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableDouble
+import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.weatherapp.domain.Interactor
-import com.example.weatherapp.domain.InteractorImpl
 import com.example.weatherapp.domain.WeatherSimpleModel
 import kotlinx.coroutines.*
 
-class WeatherViewModel : ViewModel() {
+class WeatherViewModel(private val interactor: Interactor) : ViewModel() {
 
     val pressure = ObservableDouble(0.0)
+    val pressureExists = ObservableBoolean(true)
+    val weatherTemperature = ObservableDouble(0.0)
+    val temperatureExists = ObservableBoolean(true)
+    val humidity = ObservableDouble(0.0)
+    val humidityExists = ObservableBoolean(true)
+    val windSpeed = ObservableDouble(0.0)
+    val windSpeedExists = ObservableBoolean(true)
+    val weatherType = ObservableField<String>("")
+    val isLoading = ObservableBoolean(true)
 
-    var weatherType: MutableLiveData<String> = MutableLiveData()
-    var weatherTemperature: MutableLiveData<Double> = MutableLiveData()
-    var humidity: MutableLiveData<Double> = MutableLiveData()
-    var windSpeed: MutableLiveData<Double> = MutableLiveData()
-    var isLoading: MutableLiveData<Boolean> = MutableLiveData()
     var icon: MutableLiveData<String> = MutableLiveData()
-    var error: MutableLiveData<String> = MutableLiveData()
 
-    private var interactor: Interactor = InteractorImpl()
     private var model: WeatherSimpleModel = WeatherSimpleModel()
 
     private val viewModelJob = SupervisorJob()
@@ -31,27 +34,34 @@ class WeatherViewModel : ViewModel() {
         viewModelJob.cancel()
     }
 
-    fun getWeatherData(name: String): Boolean {
-        isLoading.value = true
+    fun getWeatherData(name: String) {
         uiScope.launch {
             loadData(name)
-            if (model.error == "") {
-                weatherType.value = model.type
-                weatherTemperature.value = model.temperature
-                humidity.value = model.humidity
-                model.pressure?.let { pressure.set(it) }
-                windSpeed.value = model.wind
-                icon.value = model.icon
-            } else {
-                error.value = model.error
-            }
-            isLoading.value = false
+
+            weatherType.set(model.type)
+            if (model.temperature != null) {
+                weatherTemperature.set(model.temperature!! - constKtoC)
+                temperatureExists.set(true)
+            } else temperatureExists.set(false)
+            if (model.humidity != null) {
+                humidity.set(model.humidity!!)
+                humidityExists.set(true)
+            } else humidityExists.set(false)
+            if (model.pressure != null){
+                pressure.set(model.pressure!!)
+                pressureExists.set(true)
+            } else pressureExists.set(false)
+            if (model.wind != null){
+                windSpeed.set(model.wind!!)
+                windSpeedExists.set(true)
+            } else windSpeedExists.set(false)
+            icon.value = model.icon
+
+            isLoading.set(false)
         }
-        return true
     }
 
     private suspend fun loadData(name: String) = withContext(Dispatchers.Default) {
         model = interactor.getWeatherData(name)
     }
-
 }

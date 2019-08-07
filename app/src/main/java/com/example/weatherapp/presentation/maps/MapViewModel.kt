@@ -1,26 +1,25 @@
 package com.example.weatherapp.presentation.maps
 
+import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.util.*
 
 class MapViewModel: ViewModel() {
-    private var cityName: MutableLiveData<String> = MutableLiveData()
-    private var cityCoords: MutableLiveData<String> = MutableLiveData()
+    val cityName = ObservableField<String>()
+    val cityCoordinates = ObservableField<String>()
+    val isVisible = ObservableBoolean(false)
 
-    init {
-        cityName.value = " "
-        cityCoords.value = " "
-    }
-
-    fun getCityName():LiveData<String> = cityName
-    fun getCityCoords():LiveData<String> = cityCoords
+    fun getCityName(): String? = cityName.get()
+    fun getCityCoordinates():String? = cityCoordinates.get()
 
     fun setCityName(name: String){
-        cityName.value = name
+        cityName.set(name)
     }
-    fun setCityCoords(coords: String){
-        cityCoords.value = coords
+    fun setCityCoordinates(coords: String){
+        cityCoordinates.set(coords)
     }
 
 }

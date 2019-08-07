@@ -8,10 +8,10 @@
     <string name="h_text">Humidity: </string>
     <string name="p_text">Pressure: </string>
     <string name="w_text">Wind speed: </string>
-    <string name="temperature_blank">°C</string>
-    <string name="humidity_blank">%</string>
-    <string name="pressure_blank">hPa</string>
-    <string name="wind_speed_blank">m/s</string>
+    <string name="temperature_blank">%1$.2f°C</string>
+    <string name="humidity_blank">%1$.0f %%</string>
+    <string name="pressure_blank">%1$.0f hPa</string>
+    <string name="wind_speed_blank">%1$.1f m/s</string>
     <string name="no_data">---</string>
     <string name="error_title">Error!</string>
 </resources>

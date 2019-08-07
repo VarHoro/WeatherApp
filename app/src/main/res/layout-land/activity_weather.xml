@@ -20,7 +20,7 @@
                 app:layout_constraintGuide_percent="0.33"/>
         <TextView
                 android:id="@+id/weather_type_text"
-                android:text="@string/weather_type_blank"
+                android:text="@{viewModel.weatherType}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
@@ -48,7 +48,7 @@
         </androidx.cardview.widget.CardView>
         <TextView
                 android:id="@+id/temperature_blank"
-                android:text="@string/temperature_blank"
+                android:text="@{viewModel.temperatureExists? @string/temperature_blank(viewModel.weatherTemperature.get()) : @string/no_data}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline3" android:layout_marginEnd="8dp"/>
         <TextView
                 android:id="@+id/pressure_text"
-                android:text="@string/pressure_blank"
+                android:text="@{viewModel.pressureExists? @string/pressure_blank(viewModel.pressure.get()): @string/no_data}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp" android:layout_marginTop="8dp"
@@ -82,7 +82,7 @@
                 android:layout_marginEnd="8dp"/>
         <TextView
                 android:id="@+id/humidity_text"
-                android:text="@string/humidity_blank"
+                android:text="@{viewModel.humidityExists? @string/humidity_blank(viewModel.humidity.get()): @string/no_data}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp" android:layout_marginTop="8dp"
@@ -98,7 +98,7 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline3" android:layout_marginStart="8dp"/>
         <TextView
                 android:id="@+id/wind_speed_text"
-                android:text="@string/wind_speed_blank"
+                android:text="@{viewModel.windSpeedExists? @string/wind_speed_blank(viewModel.windSpeed.get()): @string/no_data}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
@@ -111,7 +111,7 @@
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
                 android:background="@android:color/background_light"
-                android:visibility="visible"/>
+                app:goneUnless="@{viewModel.isLoading}"/>
         <ProgressBar
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
@@ -120,11 +120,12 @@
                 app:layout_constraintBottom_toBottomOf="@+id/loading_screen"
                 app:layout_constraintStart_toStartOf="@+id/loading_screen"
                 app:layout_constraintTop_toTopOf="@+id/loading_screen"
-                android:visibility="visible"/>
+                app:goneUnless="@{viewModel.isLoading}"/>
         <androidx.constraintlayout.widget.Guideline
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/guideline3" app:layout_constraintGuide_percent="0.6607387"/>
+                android:id="@+id/guideline3" app:layout_constraintGuide_percent="0.6607387"
+        />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
