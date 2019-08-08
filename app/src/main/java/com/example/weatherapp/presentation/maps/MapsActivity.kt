@@ -1,7 +1,5 @@
 package com.example.weatherapp.presentation.maps
 
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -19,7 +17,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
 import java.io.IOException
-import com.google.android.gms.tasks.OnCompleteListener as OnCompleteListener
 
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ActivityMapsBinding
@@ -56,9 +53,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         show_weather_button.setOnClickListener {
             WeatherActivity.start(this, mapViewModel.getCityName().toString())
-/*            val intent = Intent(this, WeatherActivity::class.java)
-            intent.putExtra("cityName", mapViewModel.getCityName())
-            startActivity(intent)*/
         }
     }
 
