@@ -4,7 +4,8 @@ import com.example.weatherapp.domain.WeatherDataSource
 import com.example.weatherapp.domain.WeatherSimpleModel
 
 class WeatherDataSourceImpl(private val service: OpenWeatherAPI) : WeatherDataSource {
-    companion object const{
+
+    companion object {
         val IMAGE_URL = "https://openweathermap.org/img/wn/%s@2x.png"
     }
 
