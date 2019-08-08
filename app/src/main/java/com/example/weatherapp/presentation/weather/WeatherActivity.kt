@@ -1,6 +1,8 @@
 package com.example.weatherapp.presentation.weather
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -19,7 +21,11 @@ class WeatherActivity : AppCompatActivity() {
 
     private val weatherViewModel: WeatherViewModel by viewModel()
 
-    companion object city{
+
+    companion object {
+        fun start(context: Context, cityName: String){
+            context.startActivity(Intent(context, WeatherActivity::class.java).putExtra("cityName", cityName))
+        }
         var cityName = ""
     }
 

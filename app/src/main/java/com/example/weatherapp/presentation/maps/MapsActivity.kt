@@ -1,5 +1,6 @@
 package com.example.weatherapp.presentation.maps
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
@@ -54,9 +55,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapViewModel.isVisible.set(false)
 
         show_weather_button.setOnClickListener {
-            val intent = Intent(this, WeatherActivity::class.java)
+            WeatherActivity.start(this, mapViewModel.getCityName().toString())
+/*            val intent = Intent(this, WeatherActivity::class.java)
             intent.putExtra("cityName", mapViewModel.getCityName())
-            startActivity(intent)
+            startActivity(intent)*/
         }
     }
 
