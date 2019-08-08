@@ -47,7 +47,7 @@ class WeatherViewModel(private val interactor: Interactor) : ViewModel() {
     }
 
     private fun dataWasReceived() {
-        liveData.observeForever(observer)
+        liveData.removeObserver(observer)
     }
 
     private fun updateData(model: WeatherSimpleModel) {
