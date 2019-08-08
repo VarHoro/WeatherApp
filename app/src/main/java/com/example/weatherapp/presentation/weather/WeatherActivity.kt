@@ -15,11 +15,13 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class WeatherActivity : AppCompatActivity() {
 
-    var imageUrl = IMAGE_URL
-
     private lateinit var binding: ActivityWeatherBinding
 
     private val weatherViewModel: WeatherViewModel by viewModel()
+
+    companion object city{
+        var cityName = ""
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +33,6 @@ class WeatherActivity : AppCompatActivity() {
 
         //get cityName from intent, change title
         val bundle: Bundle? = intent.extras
-        var cityName = ""
         if (bundle != null) {
             cityName = bundle.getString("cityName").toString()
         }
@@ -45,10 +46,10 @@ class WeatherActivity : AppCompatActivity() {
             this,
             Observer { i ->
                 Glide.with(this)
-                    .load(String.format(imageUrl, i.toString()))
+                    .load(i)
                     .into(weather_type_image)
             })
-/*
+
         //show error
         val er: LiveData<String> = weatherViewModel.error
         er.observe(this, Observer { e ->
@@ -62,6 +63,6 @@ class WeatherActivity : AppCompatActivity() {
                 val alertDialog: AlertDialog = builder.create()
                 alertDialog.show()
             }
-        })*/
+        })
     }
 }

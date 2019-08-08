@@ -5,6 +5,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.maps.model.LatLng
 import java.util.*
 
 class MapViewModel: ViewModel() {
@@ -20,6 +21,14 @@ class MapViewModel: ViewModel() {
     }
     fun setCityCoordinates(coords: String){
         cityCoordinates.set(coords)
+    }
+
+    fun setNameAndCoordinates(name: String, latlng: LatLng){
+        cityName.set(name)
+        val latitude = "%.3f".format(latlng.latitude)
+        val longitude = "%.3f".format(latlng.longitude)
+        cityCoordinates.set(latitude.plus(", ").plus(longitude))
+        isVisible.set(true)
     }
 
 }

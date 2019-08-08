@@ -1,5 +1,7 @@
 package com.example.weatherapp.domain
 
+import androidx.lifecycle.LiveData
+
 interface Interactor {
-   suspend fun getWeatherData(name: String): WeatherSimpleModel
+   fun getWeatherData(name: String): LiveData<Result<WeatherSimpleModel>>
 }

@@ -1,4 +1,4 @@
-package com.example.weatherapp.domain.koin
+package com.example.weatherapp.app
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext

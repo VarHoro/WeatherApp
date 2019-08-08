@@ -8,7 +8,6 @@ import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View.VISIBLE
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -157,7 +156,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 address = addresses[0]
                 addressText = address.locality //trying to get city name
                 if (addressText != null) { //if there is smth then show popup w/ city name and coords
-                    showPopup(addressText, latlng)
+                    mapViewModel.setNameAndCoordinates(addressText, latlng)
                 }
             }
         } catch (e: IOException) {
@@ -166,12 +165,4 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return addressText ?: ""
     }
 
-    private fun showPopup(text: String, latlng: LatLng) { //show city name and coordinates
-        popup_view.visibility = VISIBLE
-
-        mapViewModel.setCityName(text)
-        val latitude = "%.3f".format(latlng.latitude)
-        val longitude = "%.3f".format(latlng.longitude)
-        mapViewModel.setCityCoordinates(latitude.plus(", ").plus(longitude))
-    }
 }
