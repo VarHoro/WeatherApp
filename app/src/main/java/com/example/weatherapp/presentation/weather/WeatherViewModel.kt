@@ -40,7 +40,7 @@ class WeatherViewModel(private val interactor: Interactor) : ViewModel() {
                 { value ->
                     updateData(value)
                 },
-                {exception ->  error.value = exception.message}
+                { exception -> error.value = exception.message }
             )
         }
         liveData.observeForever(observer)
@@ -50,7 +50,7 @@ class WeatherViewModel(private val interactor: Interactor) : ViewModel() {
         liveData.observeForever(observer)
     }
 
-    private fun updateData(model: WeatherSimpleModel){
+    private fun updateData(model: WeatherSimpleModel) {
         weatherType.set(model.type)
         temperatureExists.set(model.temperature != null)
         model.temperature?.let { weatherTemperature.set(it - constKtoC) }

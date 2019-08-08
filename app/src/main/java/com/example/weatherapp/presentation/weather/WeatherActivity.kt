@@ -23,9 +23,10 @@ class WeatherActivity : AppCompatActivity() {
 
 
     companion object {
-        fun start(context: Context, cityName: String){
+        fun start(context: Context, cityName: String) {
             context.startActivity(Intent(context, WeatherActivity::class.java).putExtra("cityName", cityName))
         }
+
         var cityName = ""
     }
 
