@@ -2,11 +2,8 @@ package com.example.weatherapp.presentation.maps
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
-import java.util.*
 
 class MapViewModel : ViewModel() {
     val cityName = ObservableField<String>()
