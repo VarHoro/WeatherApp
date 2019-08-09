@@ -40,7 +40,7 @@ class WeatherActivity : AppCompatActivity() {
         //get cityName from intent, change title
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
-            cityName = bundle.getString("cityName").toString()
+            cityName = bundle.getString(CITY_NAME).toString()
         }
         title = cityName
 
@@ -63,7 +63,7 @@ class WeatherActivity : AppCompatActivity() {
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle(R.string.error_title)
                 builder.setMessage(e)
-                builder.setPositiveButton("OK") { _, _ ->
+                builder.setPositiveButton(R.string.ok) { _, _ ->
                     finish()
                 }
                 builder.show()
