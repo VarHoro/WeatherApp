@@ -14,15 +14,6 @@ class MapViewModel : ViewModel() {
     val isVisible = ObservableBoolean(false)
 
     fun getCityName(): String? = cityName.get()
-    fun getCityCoordinates(): String? = cityCoordinates.get()
-
-    fun setCityName(name: String) {
-        cityName.set(name)
-    }
-
-    fun setCityCoordinates(coords: String) {
-        cityCoordinates.set(coords)
-    }
 
     fun setNameAndCoordinates(name: String, latlng: LatLng) {
         cityName.set(name)

@@ -20,14 +20,13 @@ class WeatherActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWeatherBinding
 
     private val weatherViewModel: WeatherViewModel by viewModel()
-
+    private lateinit var cityName:String
 
     companion object {
+        private const val CITY_NAME = "cityName"
         fun start(context: Context, cityName: String) {
-            context.startActivity(Intent(context, WeatherActivity::class.java).putExtra("cityName", cityName))
+            context.startActivity(Intent(context, WeatherActivity::class.java).putExtra(CITY_NAME, cityName))
         }
-
-        var cityName = ""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,8 +66,7 @@ class WeatherActivity : AppCompatActivity() {
                 builder.setPositiveButton("OK") { _, _ ->
                     finish()
                 }
-                val alertDialog: AlertDialog = builder.create()
-                alertDialog.show()
+                builder.show()
             }
         })
     }

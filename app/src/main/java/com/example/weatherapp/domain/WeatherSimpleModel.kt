@@ -1,10 +1,10 @@
 package com.example.weatherapp.domain
 
 data class WeatherSimpleModel(
-    var icon: String? = null,
-    var type: String? = null,
-    var temperature: Double? = null,
-    var pressure: Double? = null,
-    var humidity: Double? = null,
-    var wind: Double? = null
+    val icon: String? = null,
+    val type: String? = null,
+    val temperature: Double? = null,
+    val pressure: Double? = null,
+    val humidity: Double? = null,
+    val wind: Double? = null
 )

@@ -12,8 +12,8 @@ import com.example.weatherapp.domain.WeatherSimpleModel
 
 class WeatherViewModel(private val interactor: Interactor) : ViewModel() {
 
-    companion object Const {
-        val constKtoC = 273.15
+    companion object {
+        private const val constKtoC = 273.15
     }
 
     val pressure = ObservableDouble(0.0)
@@ -28,7 +28,7 @@ class WeatherViewModel(private val interactor: Interactor) : ViewModel() {
     val isLoading = ObservableBoolean(true)
 
     val error = MutableLiveData<String>()
-    var icon: MutableLiveData<String> = MutableLiveData()
+    val icon: MutableLiveData<String> = MutableLiveData()
 
     private lateinit var liveData: LiveData<Result<WeatherSimpleModel>>
     private lateinit var observer: Observer<Result<WeatherSimpleModel>>

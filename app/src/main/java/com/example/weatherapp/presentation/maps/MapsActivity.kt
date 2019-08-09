@@ -22,6 +22,10 @@ import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ActivityMapsBinding
 import com.example.weatherapp.presentation.weather.WeatherActivity
 import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -34,6 +38,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapsBinding
     private val mapViewModel: MapViewModel by viewModel()
 
+    private val job = SupervisorJob()
+    private val scope = CoroutineScope(Dispatchers.IO + job)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,8 +51,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         title = resources.getString(R.string.title_activity_maps)
 
         val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+            .findFragmentById(R.id.map) as? SupportMapFragment
+        mapFragment?.getMapAsync(this)
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -103,14 +110,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun updateLocationUI() {
         try {
-            if (mLocationPermissionGranted) { //show dot and button if there is permission
-                mMap.isMyLocationEnabled = true
-                mMap.uiSettings.isMyLocationButtonEnabled = true
-            } else {
-                mMap.isMyLocationEnabled = false
-                mMap.uiSettings.isMyLocationButtonEnabled = false
-                getLocationPermission()
-            }
+            mMap.isMyLocationEnabled = mLocationPermissionGranted
+            mMap.uiSettings.isMyLocationButtonEnabled = mLocationPermissionGranted
+            if (!mLocationPermissionGranted) getLocationPermission()
         } catch (e: SecurityException) {
             Log.e("MapsActivity", "Error: ${e.message}")
         }
@@ -142,17 +144,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun getAddress(latlng: LatLng): String {
         val geocoder = Geocoder(this)
-        val addresses: List<Address>?
-        val address: Address?
         var addressText: String? = ""
 
         try {
-            addresses = geocoder.getFromLocation(latlng.latitude, latlng.longitude, 1)
-            if (null != addresses && addresses.isNotEmpty()) {
-                address = addresses[0]
-                addressText = address.locality //trying to get city name
-                if (addressText != null) { //if there is smth then show popup w/ city name and coords
-                    mapViewModel.setNameAndCoordinates(addressText, latlng)
+            scope.launch {
+                val addresses: List<Address>? = geocoder.getFromLocation(latlng.latitude, latlng.longitude, 1)
+                val address: Address?
+                if (null != addresses && addresses.isNotEmpty()) {
+                    address = addresses[0]
+                    addressText = address.locality //trying to get city name
+                    if (addressText != null) { //if there is smth then show popup w/ city name and coords
+                        mapViewModel.setNameAndCoordinates(addressText!!, latlng)
+                    }
                 }
             }
         } catch (e: IOException) {
